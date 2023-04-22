@@ -6,9 +6,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.Date;
 
 @Table(name = "usuario")
@@ -37,7 +37,7 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     private Genero genero;
 
-    private LocalDateTime data_cadastro = LocalDateTime.parse(LocalDateTime.now().toString());
+    private LocalDate data_cadastro = LocalDate.now();
     private Date data_atualizacao;
 
     @Embedded
@@ -52,7 +52,7 @@ public class Usuario {
         this.data_nascimento = dados.data_nascimento();
         this.celular = dados.celular();
         this.genero = dados.genero();
-        this.data_cadastro = dados.data_cadastro();
+        this.data_cadastro = LocalDate.now();
         this.endereco = new Endereco(dados.endereco());
     }
 }

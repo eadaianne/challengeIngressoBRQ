@@ -6,7 +6,10 @@ import com.brq.challenge.usuario.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -14,24 +17,30 @@ import java.util.List;
 public class UsuarioController {
 
         @Autowired
-        private UsuarioRepository UsuarioRepository;
-
-
+        private final UsuarioRepository repository;
+        public UsuarioController(UsuarioRepository repository){
+                this.repository = repository;
+        }
 
         @PostMapping
         public void CadastrarUsuario(@RequestBody DadosCadastroUsuario dados) {
-                UsuarioRepository.save(new Usuario(dados));
-
+                DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate dataNasc = LocalDate.parse(dados.data_nascimento(), formato);
+                LocalDate dataAtual = LocalDate.now();
+                if(dataNasc.isAfter(dataAtual)){
+                        throw new RuntimeException("Data inválida.");
+                }
+                repository.save(new Usuario(dados));
         }
 
         @GetMapping
         public List<UsuarioResumo> listar() {
-                List<Usuario> usuarios = UsuarioRepository.findAll();
+                List<Usuario> usuarios = repository.findAll();
                 return UsuarioMapper.toDtoResumo(usuarios);
         }
 
         @GetMapping("/{id}")
         public Usuario detalharUsuario(@PathVariable String id) {
-                return UsuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não existe!"));
+                return repository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não existe!"));
         }
 }
