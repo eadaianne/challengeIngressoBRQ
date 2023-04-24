@@ -5,8 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Table(name = "usuario")
@@ -32,14 +33,30 @@ public class Usuario {
     private String data_nascimento;
     private String celular;
 
-    @Enumerated(EnumType.STRING)
+//    @Enumerated(EnumType.STRING)
+//    private Genero genero;
+
+    @Enumerated(EnumType.ORDINAL)
     private Genero genero;
 
-    private LocalDate data_cadastro = LocalDate.now();
+    public LocalDateTime getData_cadastro() {
+        return data_cadastro;
+    }
+
+    public void setDataCadastro(LocalDateTime data_cadastro) {
+        this.data_cadastro = data_cadastro;
+    }
+
+    // @CreationTimestamp
+    private LocalDateTime data_cadastro;
+
+    @UpdateTimestamp
     private Date data_atualizacao;
 
     @Embedded
     private Endereco endereco;
+
+    private String sexo;
 
     public Usuario(DadosCadastroUsuario dados) {
         this.cpf = dados.cpf();
@@ -50,7 +67,11 @@ public class Usuario {
         this.data_nascimento = dados.data_nascimento();
         this.celular = dados.celular();
         this.genero = dados.genero();
-        this.data_cadastro = LocalDate.now();
+        this.data_cadastro = LocalDateTime.now();
         this.endereco = new Endereco(dados.endereco());
+    }
+
+    public void setSexo(String value) {
+        this.sexo = value;
     }
 }

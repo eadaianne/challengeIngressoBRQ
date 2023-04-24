@@ -1,15 +1,19 @@
 package com.brq.challenge.usuario;
 
 public enum Genero {
+    M("1"), //MASCULINO//
+    F("2"), //FEMININO//
+    B("3"), //NÃO-BINÁRIO//
+    N("4") //PREFIRO NÃO INFORMAR//
+    ;
 
-    MASCULINO("M"),
-    FEMININO("F"),
-    NAO_BINARIO("B"),
-    PREFIRO_NAO_INFORMAR( "N");
+    private final String numero;
 
-
-    Genero(String letra) {
-
+    Genero(String numero) {
+        this.numero = numero;
     }
 
+    public String getNumero(){
+        return numero;
+    }
 }

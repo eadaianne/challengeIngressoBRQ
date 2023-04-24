@@ -6,6 +6,7 @@ import com.brq.challenge.usuario.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -24,10 +25,25 @@ public class UsuarioController {
                 DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 LocalDate dataNasc = LocalDate.parse(dados.data_nascimento(), formato);
                 LocalDate dataAtual = LocalDate.now();
+
+                //dados.data_cadastro = LocalDateTime.now();
+                //estudar depois
+
                 if(dataNasc.isAfter(dataAtual)){
                         throw new RuntimeException("Data inválida.");
                 }
-                repository.save(new Usuario(dados));
+                Usuario user = new Usuario(dados);
+
+                switch(user.getGenero()){
+                        case M -> user.setSexo("1");
+                        case F -> user.setSexo("2");
+                        case B -> user.setSexo("3");
+                        case N -> user.setSexo("4");
+                }
+
+                user.setDataCadastro(LocalDateTime.now());
+                //repository.save(new Usuario(dados));
+                repository.save(user);
         }
 
         @GetMapping
