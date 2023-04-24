@@ -35,10 +35,10 @@ public class UsuarioController {
                 Usuario user = new Usuario(dados);
 
                 switch(user.getGenero()){
-                        case M -> user.setSexo("1");
-                        case F -> user.setSexo("2");
-                        case B -> user.setSexo("3");
-                        case N -> user.setSexo("4");
+                        case "M" -> user.setGenero("1");
+                        case "F" -> user.setGenero("2");
+                        case "B" -> user.setGenero("3");
+                        case "N" -> user.setGenero("4");
                 }
 
                 user.setDataCadastro(LocalDateTime.now());

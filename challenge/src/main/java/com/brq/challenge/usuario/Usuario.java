@@ -36,8 +36,8 @@ public class Usuario {
 //    @Enumerated(EnumType.STRING)
 //    private Genero genero;
 
-    @Enumerated(EnumType.ORDINAL)
-    private Genero genero;
+//    @Enumerated(EnumType.ORDINAL)
+    private String genero;
 
     public LocalDateTime getData_cadastro() {
         return data_cadastro;
@@ -47,16 +47,14 @@ public class Usuario {
         this.data_cadastro = data_cadastro;
     }
 
-    // @CreationTimestamp
+    //@CreationTimestamp
     private LocalDateTime data_cadastro;
 
-    @UpdateTimestamp
+    //@UpdateTimestamp
     private Date data_atualizacao;
 
     @Embedded
     private Endereco endereco;
-
-    private String sexo;
 
     public Usuario(DadosCadastroUsuario dados) {
         this.cpf = dados.cpf();
@@ -71,7 +69,7 @@ public class Usuario {
         this.endereco = new Endereco(dados.endereco());
     }
 
-    public void setSexo(String value) {
-        this.sexo = value;
+    public void setGenero(String value) {
+        this.genero = value;
     }
 }
