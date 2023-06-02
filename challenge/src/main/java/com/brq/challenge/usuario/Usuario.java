@@ -50,8 +50,15 @@ public class Usuario {
     //@CreationTimestamp
     private LocalDateTime data_cadastro;
 
+    public LocalDateTime getData_atualizacao() {
+        return data_atualizacao;
+    }
+
+    public void setDataAtualizacao(LocalDateTime data_atualizacao) {
+        this.data_atualizacao = data_atualizacao;
+    }
     //@UpdateTimestamp
-    private Date data_atualizacao;
+    private LocalDateTime data_atualizacao;
 
     @Embedded
     private Endereco endereco;
