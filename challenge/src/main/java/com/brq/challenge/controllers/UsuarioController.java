@@ -74,6 +74,12 @@ public class UsuarioController {
                 repository.deleteById(id);
         }
 
+        @PutMapping ("/{id}/senhas")
+        public void alterarSenha (@PathVariable String id, @RequestBody String senha_atual){
+                var user = repository.findById(id).orElseThrow(() -> new RuntimeException("Usuário inexistente."));
+
+        }
+
         @PatchMapping ("/{id}")
         @ResponseBody
         public Usuario atualizar (@PathVariable String id, @RequestBody Map<String, Object> dadosAtualizacao){
@@ -116,5 +122,7 @@ public class UsuarioController {
                         ReflectionUtils.setField(field, userAtt, valorPropriedade);
                 });
         }
+
+
 
 }

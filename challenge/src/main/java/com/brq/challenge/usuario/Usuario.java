@@ -5,10 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Table(name = "usuario")
 @Entity(name = "usuario")
@@ -22,6 +20,7 @@ public class Usuario {
     private String id;
 
     @Column(unique = true)
+    @NotNull
     private String cpf;
 
     @Column(unique = true)
