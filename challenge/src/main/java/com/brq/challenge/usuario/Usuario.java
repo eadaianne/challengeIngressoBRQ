@@ -1,10 +1,13 @@
 package com.brq.challenge.usuario;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDateTime;
 
@@ -20,22 +23,40 @@ public class Usuario {
     private String id;
 
     @Column(unique = true)
-    @NotNull
+    @CPF
+    @NotBlank
     private String cpf;
 
     @Column(unique = true)
+    @NotBlank
+    @Length(max=50)
+    @Email
     private String email;
 
+    @NotBlank
+    @Length(min=2, max=100)
     private String nome_completo;
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    @NotBlank
+    @Length(max=100)
     private String senha;
+
+    @Length(min=1, max=20)
     private String apelido;
+
+    @NotBlank
+
     private String data_nascimento;
+
+    @NotBlank
     private String celular;
 
-//    @Enumerated(EnumType.STRING)
-//    private Genero genero;
-
-//    @Enumerated(EnumType.ORDINAL)
+    @NotBlank
+    @Length(max=2)
     private String genero;
 
     public LocalDateTime getData_cadastro() {
@@ -60,6 +81,7 @@ public class Usuario {
     private LocalDateTime data_atualizacao;
 
     @Embedded
+    @NotNull
     private Endereco endereco;
 
     public Usuario(DadosCadastroUsuario dados) {

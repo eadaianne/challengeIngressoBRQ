@@ -3,19 +3,20 @@ package com.brq.challenge.controllers;
 import com.brq.challenge.usuario.DadosCadastroUsuario;
 import com.brq.challenge.usuario.Usuario;
 import com.brq.challenge.usuario.UsuarioRepository;
-import org.hibernate.annotations.UpdateTimestamp;
+import jakarta.validation.Valid;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
-
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/challengebrq/v1/usuarios")
@@ -30,7 +31,7 @@ public class UsuarioController {
         @PostMapping
         @ResponseStatus(HttpStatus.CREATED)
         @ResponseBody
-        public Usuario CadastrarUsuario(@RequestBody DadosCadastroUsuario dados) {
+        public Usuario CadastrarUsuario(@Valid @RequestBody DadosCadastroUsuario dados) {
                 DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 LocalDate dataNasc = LocalDate.parse(dados.data_nascimento(), formato);
                 LocalDate dataAtual = LocalDate.now();
@@ -75,9 +76,18 @@ public class UsuarioController {
         }
 
         @PutMapping ("/{id}/senhas")
-        public void alterarSenha (@PathVariable String id, @RequestBody String senha_atual){
-                var user = repository.findById(id).orElseThrow(() -> new RuntimeException("Usuário inexistente."));
-
+        public ResponseEntity<Usuario> alterarSenha (@PathVariable String id, @RequestBody Map<String, Object> senhas){
+                Usuario user_att = repository.findById(id).orElseThrow(() -> new RuntimeException("Usuário inexistente."));
+                var senha_user = user_att.getSenha();
+                var senha_atual = senhas.get("senha_atual");
+                var nova_senha = senhas.get("nova_senha");
+                //BeanUtils.copyProperties(user, user_att, "id");
+                if(senha_atual.equals(senha_user)){
+                        user_att.setSenha((String) nova_senha);
+                        repository.save(user_att);
+                        return ResponseEntity.noContent().build();
+                }
+                return ResponseEntity.badRequest().build();
         }
 
         @PatchMapping ("/{id}")
